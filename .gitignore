@@ -1,0 +1,5 @@
+backend/.env
+backend/venv/
+backend/chroma_db/
+frontend/docintel-frontend/node_modules/
+frontend/docintel-frontend/.next
