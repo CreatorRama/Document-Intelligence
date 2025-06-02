@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-your-secret-key-here'
 DEBUG = False
-ALLOWED_HOSTS = ['localhost', '127.0.0.1','soonest-nov-australia-argument.trycloudflare.com']
+ALLOWED_HOSTS = ['*']  # For development only
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -101,15 +101,27 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.MultiPartParser',
     ],
 }
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    'https://soonest-nov-australia-argument.trycloudflare.com'
-]
-
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
-
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 # DeepSeek API Configuration
 # Replace with your actual API key or set as environment variable
 DEEPSEEK_API_KEY = os.environ.get('DEEPSEEK_API_KEY')
