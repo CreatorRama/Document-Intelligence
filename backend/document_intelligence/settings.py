@@ -5,8 +5,8 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-your-secret-key-here'
-DEBUG = True
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+DEBUG = False
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','soonest-nov-australia-argument.trycloudflare.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -56,11 +56,11 @@ WSGI_APPLICATION = 'document_intelligence.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'document_intelligence',
-        'USER': 'root',
-        'PASSWORD': 'Ram@6307',  # Add your MySQL password here
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'NAME': os.getenv('DB_NAME', 'document_intelligence'),
+        'USER': os.getenv('DB_USER', 'root'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'Ram@6307'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '3306'),
     }
 }
 
@@ -105,6 +105,7 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    'https://soonest-nov-australia-argument.trycloudflare.com'
 ]
 
 CORS_ALLOW_CREDENTIALS = True

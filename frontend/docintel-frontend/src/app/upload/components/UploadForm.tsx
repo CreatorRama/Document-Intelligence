@@ -69,7 +69,7 @@ export default function UploadForm({ onSuccess }: UploadFormProps) {
               ? 'Drop the file here'
               : 'Drag and drop a file here, or click to select'}
           </p>
-          <p className="text-xs text-gray-500">PDF, DOCX, or TXT (Max 10MB)</p>
+          <p className="text-xs text-gray-500">PDF, DOCX, or TXT</p>
         </div>
       </div>
 
