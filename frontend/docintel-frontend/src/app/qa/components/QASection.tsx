@@ -5,15 +5,24 @@ import { askQuestion } from '../../api/client'
 import { QuestionResponse } from '../../lib/types'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import toast from 'react-hot-toast'
+import { useSearchParams } from 'next/navigation'
 
-interface QASectionProps {
-  documentId: string
-}
-
-export default function QASection({ documentId }: QASectionProps) {
+export default function QASection() {
   const [question, setQuestion] = useState('')
   const [response, setResponse] = useState<QuestionResponse | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [documentError, setDocumentError] = useState(false)
+
+  const searchParams = useSearchParams()
+  const documentId = searchParams.get('documentId')
+
+  if (!documentId) {
+    return (
+      <div className="bg-white rounded-lg shadow p-8 text-center">
+        <p className="text-gray-500">No document selected. Please go back and select a document.</p>
+      </div>
+    )
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -22,11 +31,12 @@ export default function QASection({ documentId }: QASectionProps) {
     setIsLoading(true)
     try {
       const data = await askQuestion(documentId, question)
-      console.log(data)
       setResponse(data)
+      setDocumentError(false)
     } catch (error) {
       toast.error('Failed to get answer. Please try again.')
       console.error(error)
+      setDocumentError(true)
     } finally {
       setIsLoading(false)
     }
@@ -34,6 +44,12 @@ export default function QASection({ documentId }: QASectionProps) {
 
   return (
     <div className="space-y-6">
+      {documentError && (
+        <div className="bg-red-50 border-l-4 border-red-400 p-4">
+          <p className="text-red-700">Error connecting to document. Please check if the document still exists.</p>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="question" className="block text-sm font-medium text-gray-700">
@@ -47,6 +63,7 @@ export default function QASection({ documentId }: QASectionProps) {
               onChange={(e) => setQuestion(e.target.value)}
               className="flex-1 min-w-0 block w-full px-3 py-2 rounded-l-md border-gray-300 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
               placeholder="Enter your question..."
+              disabled={isLoading}
             />
             <button
               type="submit"
