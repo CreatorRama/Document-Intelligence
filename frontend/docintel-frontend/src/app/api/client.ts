@@ -1,49 +1,91 @@
 'use client'
 import axios from 'axios';
 
-const API_BASE_URL =  process.env.NEXT_PUBLIC_API_BASE_URL  || 'http://localhost:8000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+if (!API_BASE_URL) {
+  throw new Error('NEXT_PUBLIC_API_BASE_URL environment variable is not set');
+}
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 10000,
 });
 
-// Document Upload - POST to /api/documents/upload/
+// Add auth interceptor
+apiClient.interceptors.request.use((config) => {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+  return config;
+});
+
+// Helper function for error handling
+const handleApiError = (error: unknown) => {
+  if (axios.isAxiosError(error)) {
+    throw new Error(
+      error.response?.data?.message || 
+      error.message || 
+      'API request failed'
+    );
+  }
+  throw new Error('An unexpected error occurred');
+};
+
+// Document Upload
 export const uploadDocument = async (file: File) => {
-  const formData = new FormData();
-  formData.append('file', file);
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
 
-  const response = await apiClient.post('/documents/upload/', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-
-  return response.data;
+    const response = await apiClient.post('/documents/upload/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return handleApiError(error);
+  }
 };
 
-// Get All Documents - GET /api/documents/
+// Get All Documents
 export const fetchDocuments = async () => {
-  const response = await apiClient.get('/documents/');
-  return response.data;
+  try {
+    const response = await apiClient.get('/documents/');
+    return response.data;
+  } catch (error) {
+    return handleApiError(error);
+  }
 };
 
-// Ask Question - POST /api/ask/
+// Ask Question
 export const askQuestion = async (documentId: string, question: string, numChunks = 3) => {
-  const response = await apiClient.post('/ask/', {
-    document_id: documentId,
-    question: question,
-    num_chunks: numChunks,
-  });
-  return response.data;
+  try {
+    const response = await apiClient.post('/ask/', {
+      document_id: documentId,
+      question,
+      num_chunks: numChunks,
+    });
+    return response.data;
+  } catch (error) {
+    return handleApiError(error);
+  }
 };
 
-// Get Document details - GET /api/documents/{id}/
+// Get Document details
 export const getDocumentDetails = async (documentId: string) => {
-  const response = await apiClient.get(`/documents/${documentId}/`);
-  return response.data;
+  try {
+    const response = await apiClient.get(`/documents/${documentId}/`);
+    return response.data;
+  } catch (error) {
+    return handleApiError(error);
+  }
 };
 
 export default apiClient;
