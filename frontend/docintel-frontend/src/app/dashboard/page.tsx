@@ -1,4 +1,6 @@
 // app/dashboard/page.tsx
+
+export const revalidate = 3600; 
 import DocumentList from './components/DocumentList'
 import { fetchDocumentsServer } from '../lib/server-api'
 import { Suspense } from 'react'
