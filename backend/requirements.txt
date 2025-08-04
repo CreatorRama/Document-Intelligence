@@ -1,5 +1,5 @@
 # Django Framework
-Django==4.2.7
+Django==5.0.6
 djangorestframework==3.14.0
 
 # Database (Render uses PostgreSQL)
