@@ -106,31 +106,31 @@ def ask_question(request):
         
         document_id = serializer.validated_data['document_id']
         question = serializer.validated_data['question']
-        num_chunks = serializer.validated_data['num_chunks']
+        num_chunks = serializer.validated_data.get('num_chunks', 3)
         
-        # Get document
-        document = get_object_or_404(Document, id=document_id)
+        # Get document with validation
+        try:
+            document = Document.objects.get(id=document_id)
+        except Document.DoesNotExist:
+            return Response({
+                'success': False,
+                'error': f'Document with ID {document_id} not found.'
+            }, status=status.HTTP_404_NOT_FOUND)
         
         if document.processing_status != 'completed':
             return Response({
                 'success': False,
-                'error': 'Document is not ready for querying. Please wait for processing to complete.'
+                'error': 'Document processing is not yet complete.'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        # Perform similarity search
+        # Perform similarity search with validation
         relevant_chunks = rag_engine.similarity_search(
             query=question,
             document_id=document_id,
             num_results=num_chunks
         )
         
-        if not relevant_chunks:
-            return Response({
-                'success': False,
-                'error': 'No relevant content found in the document for your question.'
-            }, status=status.HTTP_404_NOT_FOUND)
-        
-        # Generate answer
+        # Generate answer with the validated chunks
         result = rag_engine.generate_answer(
             question=question,
             context_chunks=relevant_chunks,
@@ -152,9 +152,8 @@ def ask_question(request):
     except Exception as e:
         return Response({
             'success': False,
-            'error': str(e)
+            'error': f"An error occurred: {str(e)}"
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 @api_view(['GET'])
 def document_detail(request, document_id):
     """Get detailed information about a specific document."""

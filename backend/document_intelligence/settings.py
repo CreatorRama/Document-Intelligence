@@ -129,4 +129,3 @@ DEEPSEEK_API_URL = "https://api.deepseek.com"
 
 # ChromaDB Configuration
 CHROMA_DB_PATH = os.path.join(BASE_DIR, 'chroma_db')
-
