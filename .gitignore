@@ -2,5 +2,7 @@ backend/.env
 backend/venv/
 backend/chroma_db/
 backend/media/
+backend/staticfiles/
+backend/dump.rdb
 frontend/docintel-frontend/node_modules/
 frontend/docintel-frontend/.next
