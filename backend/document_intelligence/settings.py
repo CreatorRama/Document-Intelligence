@@ -4,9 +4,9 @@ from dotenv import load_dotenv
 load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-your-secret-key-here'
+SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False
-ALLOWED_HOSTS = ['*']  # For development only
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -30,6 +30,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')  # After SecurityMiddleware
 
 ROOT_URLCONF = 'document_intelligence.urls'
 
@@ -55,12 +58,15 @@ WSGI_APPLICATION = 'document_intelligence.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME', 'document_intelligence'),
-        'USER': os.getenv('DB_USER', 'root'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'Ram@6307'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '3306'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('PGDATABASE'),
+        'USER': os.getenv('PGUSER'),
+        'PASSWORD': os.getenv('PGPASSWORD'),
+        'HOST': os.getenv('PGHOST'),
+        'PORT': os.getenv('PGPORT'),
+         'OPTIONS': {
+            'sslmode': 'require', 
+        }
     }
 }
 
@@ -101,6 +107,17 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.MultiPartParser',
     ],
 }
+ALLOWED_HOSTS = [
+    'localhost', 
+    '127.0.0.1',
+   'https://document-intelligence-tau.vercel.app/',
+    '.onrender.com' 
+]
+
+# For production (will auto-detect Render environment)
+if os.getenv('RENDER'):  # Render injects this automatically
+    ALLOWED_HOSTS.append(os.getenv('RENDER_EXTERNAL_HOSTNAME'))
+    
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = [
@@ -127,5 +144,3 @@ CORS_ALLOW_HEADERS = [
 DEEPSEEK_API_KEY = os.environ.get('DEEPSEEK_API_KEY')
 DEEPSEEK_API_URL = "https://api.deepseek.com"
 
-# ChromaDB Configuration
-CHROMA_DB_PATH = os.path.join(BASE_DIR, 'chroma_db')
