@@ -36,7 +36,6 @@ export default function DocumentCard({ document }: DocumentCardProps) {
 
         <div className="flex justify-between items-center text-sm text-gray-500">
           <span>{format(new Date(document.created_at), 'MMM d, yyyy')}</span>
-          <span>{document.chunks_count || 0} chunks</span>
         </div>
       </div>
     </Link>

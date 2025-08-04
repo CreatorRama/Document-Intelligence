@@ -1,7 +1,7 @@
 'use client'
 import axios from 'axios';
 
-const API_BASE_URL = ' https://weed-divorce-sd-sega.trycloudflare.com/api';
+const API_BASE_URL = 'http://127.0.01:8000/api';
 if (!API_BASE_URL) {
   throw new Error('NEXT_PUBLIC_API_BASE_URL environment variable is not set');
 }
