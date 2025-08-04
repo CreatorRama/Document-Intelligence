@@ -9,7 +9,7 @@ psycopg2-binary==2.9.9
 # Environment
 python-dotenv==1.0.0
 whitenoise==6.6.0
-
+gunicorn==21.2.0 
 # Document Processing
 PyPDF2==3.0.1
 python-docx==1.1.0
