@@ -111,7 +111,7 @@ ALLOWED_HOSTS = [
     'localhost', 
     '127.0.0.1',
    'https://document-intelligence-tau.vercel.app',
-    '.onrender.com' 
+    'https://document-intelligence-6fgn.onrender.com' 
 ]
 
 # For production (will auto-detect Render environment)
