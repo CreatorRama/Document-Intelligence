@@ -6,6 +6,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False
+ALLOWED_HOSTS = [
+    'localhost', 
+    '127.0.0.1',
+   'document-intelligence-tau.vercel.app',
+    'document-intelligence-6fgn.onrender.com',
+     os.getenv('RENDER_EXTERNAL_HOSTNAME', '')
+]
 
 
 INSTALLED_APPS = [
@@ -107,12 +114,6 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.MultiPartParser',
     ],
 }
-ALLOWED_HOSTS = [
-    'localhost', 
-    '127.0.0.1',
-   'document-intelligence-tau.vercel.app',
-    'document-intelligence-6fgn.onrender.com' 
-]
 if os.getenv('RENDER'):
     ALLOWED_HOSTS.append(os.getenv('RENDER_EXTERNAL_HOSTNAME'))
     
