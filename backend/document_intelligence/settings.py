@@ -14,7 +14,7 @@ ALLOWED_HOSTS = [
     os.getenv('RENDER_EXTERNAL_HOSTNAME', '')
 ]
 
-
+CORS_PREFLIGHT_MAX_AGE = 86400
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +40,8 @@ MIDDLEWARE = [
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')  # After SecurityMiddleware
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760
 ROOT_URLCONF = 'document_intelligence.urls'
 
 TEMPLATES = [
@@ -129,30 +130,9 @@ CORS_ALLOWED_ORIGINS = [
     "https://document-intelligence-t02t.onrender.com"
 ]
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = [
-    "https://document-intelligence-tau.vercel.app",
-    "https://document-intelligence-t02t.onrender.com"
-]
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
+CORS_ALLOW_METHODS = ['*']
+CORS_ALLOW_HEADERS = ['*']
+CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 # DeepSeek API Configuration
 # Replace with your actual API key or set as environment variable
 DEEPSEEK_API_KEY = os.environ.get('DEEPSEEK_API_KEY')
