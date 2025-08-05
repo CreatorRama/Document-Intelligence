@@ -11,7 +11,7 @@ from .models import Document, DocumentChunk
 class RAGEngine:
     def __init__(self):
         # Initialize ChromaDB
-        self.chroma_client = chromadb.HttpClient(host="chromadb.zeabur.internal", port=8000)
+        self.chroma_client = chromadb.HttpClient(host="chroma-db.zeabur.app", port=8000)
         self.collection = self.chroma_client.get_or_create_collection(
             name="document_embeddings",
             metadata={"hnsw:space": "cosine"}
