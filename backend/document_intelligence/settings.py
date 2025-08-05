@@ -10,7 +10,7 @@ ALLOWED_HOSTS = [
     'localhost', 
     '127.0.0.1',
    'document-intelligence-tau.vercel.app',
-    'document-intelligence-6fgn.onrender.com',
+    'document-intelligence-t02t.onrender.com',
      os.getenv('RENDER_EXTERNAL_HOSTNAME', '')
 ]
 
@@ -71,9 +71,6 @@ DATABASES = {
         'PASSWORD': os.getenv('PGPASSWORD'),
         'HOST': os.getenv('PGHOST'),
         'PORT': os.getenv('PGPORT'),
-         'OPTIONS': {
-            'sslmode': 'require', 
-        }
     }
 }
 
@@ -125,7 +122,7 @@ if os.getenv('RENDER'):  # Render injects this automatically
     
 CORS_ALLOWED_ORIGINS = [
     "https://document-intelligence-tau.vercel.app",
-    "https://document-intelligence-6fgn.onrender.com"
+    "https://document-intelligence-t02t.onrender.com"
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = [
