@@ -110,15 +110,22 @@ REST_FRAMEWORK = {
 ALLOWED_HOSTS = [
     'localhost', 
     '127.0.0.1',
-   'https://document-intelligence-tau.vercel.app',
-    'https://document-intelligence-6fgn.onrender.com' 
+   'document-intelligence-tau.vercel.app',
+    'document-intelligence-6fgn.onrender.com' 
 ]
-
+if os.getenv('RENDER'):
+    ALLOWED_HOSTS.append(os.getenv('RENDER_EXTERNAL_HOSTNAME'))
+    
+GUNICORN_TIMEOUT = 120  
+GUNICORN_WORKERS = 1 
 # For production (will auto-detect Render environment)
 if os.getenv('RENDER'):  # Render injects this automatically
     ALLOWED_HOSTS.append(os.getenv('RENDER_EXTERNAL_HOSTNAME'))
     
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://document-intelligence-tau.vercel.app",
+    "https://document-intelligence-6fgn.onrender.com"
+]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = [
     'DELETE',
