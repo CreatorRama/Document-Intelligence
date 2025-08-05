@@ -7,11 +7,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False
 ALLOWED_HOSTS = [
-    'localhost', 
-    '127.0.0.1',
-   'document-intelligence-tau.vercel.app',
     'document-intelligence-t02t.onrender.com',
-     os.getenv('RENDER_EXTERNAL_HOSTNAME', '')
+    'document-intelligence-tau.vercel.app',
+    'localhost',
+    '127.0.0.1',
+    os.getenv('RENDER_EXTERNAL_HOSTNAME', '')
 ]
 
 
@@ -28,8 +28,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  
+    'corsheaders.middleware.CorsMiddleware',  
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -37,7 +38,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')  # After SecurityMiddleware
 
@@ -123,7 +123,13 @@ GUNICORN_WORKERS = 1
 if os.getenv('RENDER'):  # Render injects this automatically
     ALLOWED_HOSTS.append(os.getenv('RENDER_EXTERNAL_HOSTNAME'))
     
+CORS_ALLOW_ALL_ORIGINS = False  # For production, keep this False
 CORS_ALLOWED_ORIGINS = [
+    "https://document-intelligence-tau.vercel.app",
+    "https://document-intelligence-t02t.onrender.com"
+]
+CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = [
     "https://document-intelligence-tau.vercel.app",
     "https://document-intelligence-t02t.onrender.com"
 ]
