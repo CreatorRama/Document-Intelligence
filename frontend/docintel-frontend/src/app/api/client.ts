@@ -13,6 +13,8 @@ const apiClient = axios.create({
   }
 });
 
+axios.defaults.withCredentials = true
+
 // Add auth interceptor
 apiClient.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
